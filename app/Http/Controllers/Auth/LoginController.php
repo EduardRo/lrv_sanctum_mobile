@@ -23,7 +23,14 @@ class LoginController extends Controller
             'email' => ['The provided credentials are incorrect.'],
         ]);
     }
+    $token = $user->createToken($request->device_name)->plainTextToken;
+    $response = ['user'=>$user,'token'=>$token];
+    return response($response, 201);
+    }
 
-    return $user->createToken($request->device_name)->plainTextToken;
+    public function logout(Request $request){
+        auth()->user()->tokens()->delete();
+        return ['message'=>'Loggout'];
+        
     }
 }
